@@ -26,6 +26,13 @@
                               + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                               + '0123456789';
 
+        /**
+         * Generate a random integer.
+         *
+         * @param {Number} min The lowest value.
+         * @param {Number} range The highest value.
+         * @return {Number} random value between min and range.
+         */
         function rand(min, range) {
             var randomized = Math.random();
             var numbered   = ((randomized * (range - min + 1)) + min);
