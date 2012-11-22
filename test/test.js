@@ -114,4 +114,54 @@
             equal(result.length, maximumLoad, 'password is ' + length + ' characters generates ' + maximumLoad + ' times');
         });
     });
+
+    test('Invalid arguments will return a Not-A-Number', function() {
+        expect(11 * 2);
+
+        var invalidArguments = [
+            {label: 'zero',     value: 0},
+            {label: 'nearzero', value: 0.1},
+            {label: 'minus',    value: -1},
+            {label: 'null',     value: null},
+            {label: 'NaN',      value: NaN},
+            {label: 'false',    value: false},
+            {label: 'empty',    value: ''},
+            {label: 'string',   value: '1st'},
+            {label: 'array',    value: [24, 42]},
+            {label: 'object',   value: {number: 42}},
+            {label: 'Infinity', value: Infinity}
+        ];
+        $.each(invalidArguments, function() {
+            var password = $.mkpasswd({length: this.value});
+            equal(typeof password, 'number', 'password a number: ' +  this.label);
+            // IE does not support "Number.isNaN()"
+            ok(isNaN(password), 'password a Not-A-Number: ' +  this.label);
+        });
+    });
+
+    test('Trick arguments will return a password', function() {
+        expect(4);
+
+        var trickArguments = [
+            {label: 'true',   value: true,  expected:  1},
+            {label: 'array',  value: [42],  expected: 42},
+            {label: 'string', value: '24',  expected: 24},
+            {label: 'float',  value: '1.0', expected:  1}
+        ];
+        $.each(trickArguments, function() {
+            var password = $.mkpasswd({length: this.value});
+            equal(password.length, this.expected, 'new password: ' +  this.label);
+        });
+    });
+
+    test('Round up the decimal.', function() {
+        var password = $.mkpasswd({length: 42.0});
+        equal(password.length, 42, 'round down ".0"');
+
+        var password = $.mkpasswd({length: 42.1});
+        equal(password.length, 43, 'round up ".1"');
+
+        var password = $.mkpasswd({length: 42.9});
+        equal(password.length, 43, 'round up ".9"');
+    });
 }) (this);

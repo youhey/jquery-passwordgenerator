@@ -22,9 +22,6 @@
      */
     var PasswordGenerator = (function() {
 
-        PasswordGenerator.prototype.except = 'Il1O0q9covy';
-        PasswordGenerator.prototype.length = 0;
-
         var SPECIES_CHARACTER = 'abcdefghijklmnopqrstuvwxyz'
                               + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
                               + '0123456789';
@@ -46,18 +43,23 @@
          *                 except: Except this character from the password.
          */
         function PasswordGenerator(args) {
+            if (typeof args === 'undefined') {
+                args = {};
+            };
             var option = $.extend({
-                except: null,
-                length: null
-            }, args || {});
+                except: undefined,
+                length: undefined
+            }, args);
 
-            if (option.except !== null) {
+            if (typeof option.except !== 'undefined') {
                 this.except = option.except;
             };
-            if (option.length !== null) {
+            if (typeof option.length !== 'undefined') {
                 this.length = option.length;
             };
         };
+        PasswordGenerator.prototype.except = 'Il1O0q9covy';
+        PasswordGenerator.prototype.length = 0;
 
         /**
          * generate new password.
@@ -65,8 +67,11 @@
          * @return {String} a new password.
          */
         PasswordGenerator.prototype.generate = function() {
-            if (this.length <= 0) {
-                return NaN;
+            // Number.isFinite('42') => false
+            // global.isFinite('42') => true
+            // ...and IE does not support "Number.isFinite()"
+            if (!isFinite(this.length) || !(this.length >= 1)) {
+                return Number.NaN;
             };
 
             var speciesOfPassword = SPECIES_CHARACTER;
@@ -115,14 +120,16 @@
      * $.mkpasswd({except: '0123456789'});
      * </code>
      *
-     * @param {Object} The behavior of generator.
+     * @param {Object} args The behavior of generator.
      * @return {String} a new password.
      */
-    $.mkpasswd = function(options) {
+    $.mkpasswd = function(args) {
+        if (typeof args === 'undefined') {
+            args = {};
+        };
         var setting = $.extend({
-            length: 8,
-            except: null
-        }, options || {});
+            length: 8
+        }, args);
 
         var password = (new PasswordGenerator(setting)).generate();
 
