@@ -164,4 +164,64 @@
         var password = $.mkpasswd({length: 42.9});
         equal(password.length, 43, 'round up ".9"');
     });
+
+    test('Appear equally of uppercase (Probability 1/100 or more)', function() {
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        expect(26); // upper-case alphabetic characters
+
+        var PARAMETER_OF_PROBABILITY = 100;
+
+        for (var i = 0, l = characters.length; i < l; i++) {
+            var testCharacter = characters.charAt(i);
+            var occurrences   = 0;
+            for (var j = 0; j < PARAMETER_OF_PROBABILITY; j++) {
+                var password = $.mkpasswd({except: ''});
+                if (password.indexOf(testCharacter) !== -1) {
+                    ++occurrences;
+                };
+            };
+            ok((occurrences > 0), 'occurrence character: ' + testCharacter);
+        };
+    });
+
+    test('Appear equally of lowercase (Probability 1/100 or more)', function() {
+        var characters = 'abcdefghijklmnopqrstuvwxyz';
+
+        expect(26); // lower-case alphabetic characters
+
+        var PARAMETER_OF_PROBABILITY = 100;
+
+        for (var i = 0, l = characters.length; i < l; i++) {
+            var testCharacter = characters.charAt(i);
+            var occurrences   = 0;
+            for (var j = 0; j < PARAMETER_OF_PROBABILITY; j++) {
+                var password = $.mkpasswd({except: ''});
+                if (password.indexOf(testCharacter) !== -1) {
+                    ++occurrences;
+                };
+            };
+            ok((occurrences > 0), 'occurrence character: ' + testCharacter);
+        };
+    });
+
+    test('Appear equally of number (Probability 1/100 or more)', function() {
+        var characters = '0123456789';
+
+        expect(10); // number characters
+
+        var PARAMETER_OF_PROBABILITY = 100;
+
+        for (var i = 0, l = characters.length; i < l; i++) {
+            var testCharacter = characters.charAt(i);
+            var occurrences   = 0;
+            for (var j = 0; j < PARAMETER_OF_PROBABILITY; j++) {
+                var password = $.mkpasswd({except: ''});
+                if (password.indexOf(testCharacter) !== -1) {
+                    ++occurrences;
+                };
+            };
+            ok((occurrences > 0), 'occurrence character: ' + testCharacter);
+        };
+    });
 }) (this);

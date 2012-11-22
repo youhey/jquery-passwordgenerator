@@ -24,7 +24,20 @@
 
         var SPECIES_CHARACTER = 'abcdefghijklmnopqrstuvwxyz'
                               + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-                              + '0123456789';
+                              + '0123456789'
+            .split('')
+            .sort(function() {
+                var a = Math.random();
+                var b = Math.random();
+                var x = 0;
+                if (a > b) {
+                    x = -1;
+                } else if (a < b) {
+                    x = 1
+                };
+                return x;
+            })
+            .join('');
 
         /**
          * Generate a random integer.
